@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUKFLIX</title>
+  <link rel="icon" type="image/png" href="https://assets.kiwify.com.br/cdn-cgi/image/fit=scale-down,width=1000/fRt4sw0qezOyfuU/Ideias-20230427_110514_5f6025afd15b42deabd305a3f9352375.jpg">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            netflixRed: '#E50914',
+            netflixDark: '#141414',
+            netflixGray: '#303030',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@300;400;500;700&display=swap');
+    
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #000;
+      color: white;
+      min-height: 100vh;
+    }
+    
+    .logo-font {
+      font-family: 'Bebas Neue', cursive;
+    }
+    
+    .hero-gradient {
+      background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.8) 100%);
+    }
+    
+    .media:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+      z-index: 10;
+    }
+    
+    .media:hover .play-icon {
+      opacity: 1;
+    }
+    
+    .play-icon {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .navbar {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.7) 10%, rgba(0,0,0,0) 100%);
+    }
+    
+    .scroll-container {
+      scrollbar-width: none;
+    }
+    
+    .scroll-container::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .category-button.active {
+      background-color: white;
+      color: black;
+    }
+    
+    .iframe-container {
+      aspect-ratio: 16/9;
+    }
+  </style>
+</head>
+<body class="relative">
+  <!-- Navbar -->
+  <nav class="navbar fixed top-0 left-0 w-full z-50 px-4 py-2 flex justify-between items-center">
+    <div class="flex items-center">
+      <h1 class="logo-font text-netflixRed text-4xl md:text-5xl">LUKFLIX</h1>
+      <div class="hidden md:flex ml-8 space-x-4">
+        <a href="#" class="text-white hover:text-gray-300">Início</a>
+        <a href="#" class="text-white hover:text-gray-300">Séries</a>
+        <a href="#" class="text-white hover:text-gray-300">Filmes</a>
+        <a href="#" class="text-white hover:text-gray-300">Animes</a>
+        <a href="#" class="text-white hover:text-gray-300">Futebol</a>
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="relative hidden md:block">
+        <input type="text" placeholder="Títulos, pessoas, gêneros" class="bg-black bg-opacity-50 border border-gray-600 rounded px-3 py-1 text-sm w-64 focus:outline-none focus:border-white">
+        <i class="fas fa-search absolute right-3 top-2 text-gray-400"></i>
+      </div>
+      <div class="w-8 h-8 rounded bg-netflixGray flex items-center justify-center cursor-pointer">
+        <i class="fas fa-bell text-white"></i>
+      </div>
+      <div class="w-8 h-8 rounded overflow-hidden cursor-pointer">
+        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile" class="w-full h-full object-cover">
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative h-screen flex items-center hero-gradient">
+    <div class="absolute inset-0 overflow-hidden">
+      <img src="https://image.tmdb.org/t/p/original/8GnWDLn2AhnmkQ7hlQ9NJUYobSS.jpg" alt="Featured" class="w-full h-full object-cover">
+    </div>
+    <div class="relative z-10 px-8 md:px-16 max-w-3xl">
+      <h1 class="text-4xl md:text-6xl font-bold mb-4">Godzilla Minus One</h1>
+      <p class="text-lg md:text-xl mb-6">No Japão do pós-guerra, Godzilla aparece e causa estragos. Um ex-piloto kamikaze, que já havia desistido de viver, junta-se a um grupo de pessoas para combater a ameaça.</p>
+      <div class="flex space-x-4">
+        <button class="bg-white text-black px-6 py-2 rounded flex items-center hover:bg-opacity-80 transition">
+          <i class="fas fa-play mr-2"></i> Assistir
+        </button>
+        <button class="bg-gray-600 bg-opacity-70 text-white px-6 py-2 rounded flex items-center hover:bg-opacity-50 transition">
+          <i class="fas fa-info-circle mr-2"></i> Mais informações
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Content Sections -->
+  <div class="relative z-20 pb-20 -mt-20">
+    <!-- Categories -->
+    <div class="px-8 py-6 flex space-x-4 overflow-x-auto scroll-container">
+      <button class="category-button active px-4 py-1 rounded-full border border-white bg-white text-black">Todos</button>
+      <button class="category-button px-4 py-1 rounded-full border border-gray-600 hover:border-white">Filmes</button>
+      <button class="category-button px-4 py-1 rounded-full border border-gray-600 hover:border-white">Séries</button>
+      <button class="category-button px-4 py-1 rounded-full border border-gray-600 hover:border-white">Animes</button>
+      <button class="category-button px-4 py-1 rounded-full border border-gray-600 hover:border-white">Futebol</button>
+    </div>
+
+    <!-- Featured Row -->
+    <section class="px-8 mb-8">
+      <h2 class="text-xl md:text-2xl font-bold mb-4">Em Destaque</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div class="media relative rounded overflow-hidden cursor-pointer group" onclick="showFeatured('https://superflixapi.top/filme/tt23289160')">
+          <img src="https://upload.wikimedia.org/wikipedia/pt/e/e0/Godzilla_Minus_One_Poster.jpeg" alt="Godzilla Minus One" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group" onclick="showFeatured('https://superflixapi.top/filme/tt15352516')">
+          <img src="https://image.tmdb.org/t/p/original/t2wpjvGFA9ZdQFZn4Phg6QKZRBH.jpg" alt="O Natal do Pequeno Batman" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group" onclick="showFeatured('https://embedder.net/e/tt10342730')">
+          <img src="https://image.tmdb.org/t/p/w300/jJ7eIqsVLtRwLCX6KeJNeQYjPar.jpg" alt="Nome" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Continue Watching -->
+    <section class="px-8 mb-8">
+      <h2 class="text-xl md:text-2xl font-bold mb-4">Continue Assistindo</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-netflixRed" style="width: 65%"></div>
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-netflixRed" style="width: 30%"></div>
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-netflixRed" style="width: 80%"></div>
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-netflixRed" style="width: 45%"></div>
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-netflixRed" style="width: 15%"></div>
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="absolute bottom-0 left-0 right-0 h-1 bg-netflixRed" style="width: 90%"></div>
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular on LUKFLIX -->
+    <section class="px-8 mb-8">
+      <h2 class="text-xl md:text-2xl font-bold mb-4">Popular no LUKFLIX</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg" alt="Spider-Man: Across the Spider-Verse" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+        <div class="media relative rounded overflow-hidden cursor-pointer group">
+          <img src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Oppenheimer" class="w-full h-auto object-cover">
+          <div class="play-icon absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div class="w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center">
+              <i class="fas fa-play text-black text-xl"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Video Player Modal -->
+  <div id="playerModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-90">
+    <div class="relative w-full max-w-6xl px-4">
+      <button onclick="hidePlayer()" class="absolute -top-12 right-4 text-white text-3xl hover:text-netflixRed transition">
+        <i class="fas fa-times"></i>
+      </button>
+      <div class="iframe-container w-full rounded overflow-hidden">
+        <iframe id="videoPlayer" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-black text-gray-400 py-8 px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="https://wa.me/557192920032" target="_blank" class="hover:text-white transition">
+          <i class="fab fa-whatsapp text-2xl"></i>
+        </a>
+        <a href="https://www.instagram.com/071lkz/" target="_blank" class="hover:text-white transition">
+          <i class="fab fa-instagram text-2xl"></i>
+        </a>
+        <a href="https://www.facebook.com/lucas.coelho.7564129" target="_blank" class="hover:text-white transition">
+          <i class="fab fa-facebook text-2xl"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/lucas-nathan-760944229/" target="_blank" class="hover:text-white transition">
+          <i class="fab fa-linkedin text-2xl"></i>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-6">
+        <div>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Idioma e legendas</a></li>
+            <li><a href="#" class="hover:text-white transition">Imprensa</a></li>
+            <li><a href="#" class="hover:text-white transition">Privacidade</a></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Audiodescrição</a></li>
+            <li><a href="#" class="hover:text-white transition">Relações com investidores</a></li>
+            <li><a href="#" class="hover:text-white transition">Avisos legais</a></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Centro de ajuda</a></li>
+            <li><a href="#" class="hover:text-white transition">Carreiras</a></li>
+            <li><a href="#" class="hover:text-white transition">Preferências de cookies</a></li>
+          </ul>
+        </div>
+        <div>
+          <ul class="space-y-2 text-sm">
+            <li><a href="#" class="hover:text-white transition">Cartão pré-pago</a></li>
+            <li><a href="#" class="hover:text-white transition">Termos de uso</a></li>
+            <li><a href="#" class="hover:text-white transition">Informações corporativas</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center text-xs">
+        <p>© 2024 LUKFLIX. Todos os direitos reservados.</p>
+        <p class="mt-2">Desenvolvido por Lucas Nathan</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Player functions
+    function showFeatured(url) {
+      const playerModal = document.getElementById('playerModal');
+      const videoPlayer = document.getElementById('videoPlayer');
+      
+      videoPlayer.src = url;
+      playerModal.classList.remove('hidden');
+      playerModal.classList.add('flex');
+      
+      // Prevent scrolling when modal is open
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function hidePlayer() {
+      const playerModal = document.getElementById('playerModal');
+      const videoPlayer = document.getElementById('videoPlayer');
+      
+      videoPlayer.src = '';
+      playerModal.classList.add('hidden');
+      playerModal.classList.remove('flex');
+      
+      // Restore scrolling
+      document.body.style.overflow = 'auto';
+    }
+    
+    // Category selection
+    const categoryButtons = document.querySelectorAll('.category-button');
+    categoryButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        categoryButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+      });
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('playerModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        hidePlayer();
+      }
+    });
+  </script>
+</body>
+</html>
