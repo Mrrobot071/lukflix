@@ -113,10 +113,27 @@ function renderCard(category, id) {
   return card;
 }
 
+// ---------- Login SuperFlixAPI ----------
+// A SuperFlixAPI protege o player com uma verificação (captcha) ou login.
+// Abrir o login em outra aba grava o cookie de sessão no navegador, o que
+// faz o iframe do player (mesmo domínio) ignorar a verificação.
+document.getElementById('sflixLogin').addEventListener('click', () => {
+  window.open('https://superflixapi.sbs/login', '_blank', 'noopener');
+});
+
 // ---------- Detalhe / Player ----------
 
 const detailModal = document.getElementById('detailModal');
 const detailBody = document.getElementById('detailBody');
+
+function playerNote() {
+  return el('p', {
+    class: 'hint',
+    html: 'Player da <b>SuperFlixAPI</b>. Se aparecer uma verificação, ' +
+          '<a href="https://superflixapi.sbs/login" target="_blank" rel="noopener">faça login na SuperFlixAPI</a> ' +
+          'em outra aba e recarregue esta página.'
+  });
+}
 
 async function openDetail(media, id) {
   detailBody.innerHTML = '<div class="loading-more">Carregando…</div>';
@@ -164,6 +181,7 @@ async function openDetail(media, id) {
   // Player
   const playerWrap = el('div', { class: 'player-wrap' });
   infoCol.appendChild(playerWrap);
+  infoCol.appendChild(playerNote());
 
   if (media === 'movie') {
     playerWrap.appendChild(buildPlayerFrame(`${SUPERFLIX_PLAYER}/filme/${id}`));
