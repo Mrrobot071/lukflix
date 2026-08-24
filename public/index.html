@@ -22,14 +22,8 @@
         <button type="submit" aria-label="Buscar">🔍</button>
       </form>
       <button class="icon-btn" id="sflixLogin" title="Login SuperFlixAPI (libera o player)">🔑</button>
-      <button class="icon-btn" id="settingsBtn" title="Configurações">⚙️</button>
     </div>
   </header>
-
-  <div id="keyBanner" class="banner hidden">
-    ⚠️ Adicione sua chave da API do TMDB nas <strong>configurações (⚙️)</strong> para exibir pôsteres e informações.
-    <button id="bannerClose">×</button>
-  </div>
 
   <main id="catalog" class="catalog"></main>
 
@@ -41,30 +35,8 @@
     </div>
   </div>
 
-  <div id="settingsModal" class="modal hidden">
-    <div class="modal-backdrop" data-close></div>
-    <div class="modal-content settings-content">
-      <button class="modal-close" data-close>×</button>
-      <h2>Configurações</h2>
-      <label class="field">
-        <span>Chave da API do TMDB</span>
-        <input type="text" id="tmdbKeyInput" placeholder="Cole sua chave v3 (api_key)" />
-      </label>
-      <p class="hint">
-        Obtenha uma chave gratuita em
-        <a href="https://www.themoviedb.org/settings/api" target="_blank" rel="noopener">themoviedb.org/settings/api</a>.
-        A chave fica salva apenas neste navegador (localStorage).
-      </p>
-      <div class="settings-actions">
-        <button class="btn primary" id="saveKey">Salvar</button>
-        <button class="btn" id="clearKey">Remover</button>
-      </div>
-      <p id="settingsStatus" class="status"></p>
-    </div>
-  </div>
-
   <footer class="footer">
-    Lukflix · Conteúdo via SuperFlixAPI · Metadados via TMDB
+    Lukflix · Conteúdo via SuperFlixAPI
   </footer>
 
   <script src="/js/config.js"></script>

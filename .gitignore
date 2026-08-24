@@ -10,3 +10,7 @@ node.log
 tunnel.log
 tunnel.err
 lt.log
+
+node_run.log
+node_run.err
+centro-custos-construtec-v3/

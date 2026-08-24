@@ -1,7 +1,7 @@
 {
   "name": "lukflix",
   "version": "1.0.0",
-  "description": "Lukflix - streaming web app integrado com a SuperFlixAPI (filmes, séries, animes e doramas) com metadados via TMDB.",
+  "description": "Lukflix - streaming web app integrado apenas com a SuperFlixAPI (filmes, séries, animes e doramas).",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -21,6 +21,6 @@
     "filmes",
     "series",
     "animes",
-    "tmdb"
+    "doramas"
   ]
 }
