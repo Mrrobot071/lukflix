@@ -3,11 +3,27 @@
 // ---------- SuperFlixAPI (via proxy do backend) ----------
 
 // Busca listas genéricas da SuperFlixAPI.
+// Tenta primeiro o proxy local do backend (Node) e, se falhar (ex.: site
+// estático no GitHub Pages), usa proxies CORS públicos.
 async function sfList(params) {
   const qs = new URLSearchParams(params).toString();
-  const res = await fetch(`${CONFIG.SUPERFLIX_PROXY}/lista?${qs}`);
-  if (!res.ok) throw new Error('SuperFlixAPI respondeu ' + res.status);
-  return res.json();
+  const targets = [
+    `${CONFIG.SUPERFLIX_PROXY}/lista?${qs}`,
+    ...CORS_PROXIES.map(p => p(`${CONFIG.SUPERFLIX_HOST}/lista?${qs}`))
+  ];
+
+  let lastErr;
+  for (const url of targets) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      return JSON.parse(text);
+    } catch (e) {
+      lastErr = e;
+    }
+  }
+  throw new Error('SuperFlixAPI indisponível (proxy CORS falhou): ' + (lastErr && lastErr.message));
 }
 
 // Gêneros de um catálogo (filme/serie/anime/dorama).

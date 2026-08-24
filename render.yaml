@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: lukflix
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: node server.js
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 3000

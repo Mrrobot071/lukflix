@@ -49,8 +49,19 @@ public/
 
 ## Deploy
 
-Por ser um app Node sem dependências, pode ser hospedado em Render, Railway, Fly.io, etc.
+Por ser um app Node sem dependências, pode ser hospedado em qualquer PaaS.
 Defina a variável de ambiente `PORT` se o host exigir.
+
+### Deploy com 1 clique (Render, gratuito, sem cartão)
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Mrrobot071/lukflix)
+
+Clique no botão, conecte sua conta GitHub e o Render sobe o site automaticamente.
+Também há um `render.yaml` e um `Procfile` prontos para Railway/Heroku.
+
+> Observação: a SuperFlixAPI não envia cabeçalhos CORS, por isso o backend
+> faz o proxy das listas. Um site puramente estático (ex.: GitHub Pages) só
+> funciona se houver um proxy CORS acessível — o `server.js` já entrega isso.
 
 ## Licença
 

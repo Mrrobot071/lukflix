@@ -2,11 +2,19 @@
 
 const CONFIG = {
   SUPERFLIX_PROXY: '/api/superflix',
+  SUPERFLIX_HOST: 'https://superflixapi.sbs',
   TMDB_BASE: 'https://api.themoviedb.org/3',
   IMG: 'https://image.tmdb.org/t/p/w342',
   IMG_LG: 'https://image.tmdb.org/t/p/w780',
   IMG_ORIGINAL: 'https://image.tmdb.org/t/p/original'
 };
+
+// Proxies CORS públicos usados quando o app roda como site estático
+// (ex.: GitHub Pages), já que a SuperFlixAPI não envia cabeçalhos CORS.
+const CORS_PROXIES = [
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://corsproxy.io/?url=${encodeURIComponent(u)}`
+];
 
 const STORAGE_KEY = 'lukflix_tmdb_key';
 
