@@ -10,7 +10,20 @@ const TAB_MAP = {
 };
 
 let currentTab = 'filme';
+let tmdbAvailable = false;
 const catalogEl = document.getElementById('catalog');
+
+// Verifica se o TMDB está acessível (chave no servidor OU chave do navegador).
+async function checkTmdb() {
+  try {
+    await tmdb('/movie/550');
+    tmdbAvailable = true;
+    document.getElementById('keyBanner').classList.add('hidden');
+  } catch (e) {
+    tmdbAvailable = false;
+    if (!tmdbKey()) document.getElementById('keyBanner').classList.remove('hidden');
+  }
+}
 
 // ---------- Utilidades de UI ----------
 
@@ -87,7 +100,7 @@ function renderCard(category, id) {
   const poster = el('div', { class: 'no-poster', text: 'TMDB ID: ' + id });
   card.appendChild(poster);
 
-  if (hasTmdbKey()) {
+  if (tmdbAvailable) {
     tmdb(media === 'movie' ? `/movie/${id}` : `/tv/${id}`)
       .then(data => {
         if (data && data.poster_path) {
@@ -145,7 +158,7 @@ async function openDetail(media, id) {
   detailBody.append(posterCol, infoCol);
 
   let data = null;
-  if (hasTmdbKey()) {
+  if (tmdbAvailable) {
     try {
       data = media === 'movie' ? await tmdbMovie(id) : await tmdbTv(id);
     } catch (e) {
@@ -262,7 +275,7 @@ async function buildSeriesPlayer(container, id, data) {
 
 async function runSearch(query) {
   catalogEl.innerHTML = '';
-  if (!hasTmdbKey()) {
+  if (!tmdbAvailable) {
     catalogEl.appendChild(el('p', { class: 'loading-more', text: 'Adicione a chave do TMDB para buscar.' }));
     return;
   }
@@ -319,14 +332,14 @@ document.getElementById('settingsBtn').addEventListener('click', () => {
   settingsModal.classList.remove('hidden');
 });
 
-document.getElementById('saveKey').addEventListener('click', () => {
+document.getElementById('saveKey').addEventListener('click', async () => {
   const v = tmdbKeyInput.value.trim();
   if (!v) { settingsStatus.textContent = 'Cole uma chave válida.'; settingsStatus.className = 'status err'; return; }
   setTmdbKey(v);
-  settingsStatus.textContent = 'Chave salva! Recarregando catálogo…';
+  settingsStatus.textContent = 'Chave salva! Verificando…';
   settingsStatus.className = 'status ok';
-  document.getElementById('keyBanner').classList.add('hidden');
-  setTimeout(() => { closeModals(); loadCatalog(currentTab); }, 600);
+  await checkTmdb();
+  setTimeout(() => { closeModals(); loadCatalog(currentTab); }, 300);
 });
 
 document.getElementById('clearKey').addEventListener('click', () => {
@@ -337,7 +350,7 @@ document.getElementById('clearKey').addEventListener('click', () => {
 });
 
 // Banner de chave
-if (!hasTmdbKey()) document.getElementById('keyBanner').classList.remove('hidden');
+checkTmdb();
 document.getElementById('bannerClose').addEventListener('click', () => {
   document.getElementById('keyBanner').classList.add('hidden');
 });

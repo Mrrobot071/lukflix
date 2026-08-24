@@ -24,9 +24,13 @@ node server.js
 
 Acesse http://localhost:3000
 
-1. Clique no ícone **⚙️** (configurações) no canto superior direito.
-2. Cole sua chave do TMDB e salve.
-3. Navegue pelas abas **Filmes / Séries / Animes / Doramas**, busque e clique em um título para assistir.
+A chave do TMDB pode ser configurada de dois jeitos:
+
+1. **No servidor (recomendado):** crie um arquivo `.env` com `TMDB_API_KEY=sua_chave`.
+   Assim o front-end funciona sem precisar colar a chave no navegador.
+2. **No navegador:** clique no ícone **⚙️** e cole a chave (vai para o localStorage).
+
+Navegue pelas abas **Filmes / Séries / Animes / Doramas**, busque e clique em um título para assistir.
 
 Sem a chave do TMDB o catálogo ainda funciona (os cards mostram o ID e o player abre), mas sem pôsteres nem sinopse.
 

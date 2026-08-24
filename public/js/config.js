@@ -3,6 +3,7 @@
 const CONFIG = {
   SUPERFLIX_PROXY: '/api/superflix',
   SUPERFLIX_HOST: 'https://superflixapi.sbs',
+  TMDB_PROXY: '/api/tmdb',
   TMDB_BASE: 'https://api.themoviedb.org/3',
   IMG: 'https://image.tmdb.org/t/p/w342',
   IMG_LG: 'https://image.tmdb.org/t/p/w780',

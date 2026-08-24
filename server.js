@@ -63,6 +63,48 @@ function proxySuperflix(req, res, pathname, queryString) {
   request.end();
 }
 
+// Proxy para o TMDB. A chave fica no servidor (process.env.TMDB_API_KEY),
+// então o front-end funciona sem precisar colar a chave no navegador.
+function proxyTmdb(req, res, pathname, queryString) {
+  const apiKey = process.env.TMDB_API_KEY;
+  if (!apiKey) {
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    return res.end(JSON.stringify({ error: 'TMDB_API_KEY não configurada no servidor' }));
+  }
+  const targetPath = pathname.replace(/^\/api\/tmdb/, '') || '/';
+  const prefix = queryString ? '?' + queryString + '&' : '?';
+  const target = '/3' + targetPath + prefix + 'api_key=' + encodeURIComponent(apiKey);
+
+  const options = {
+    hostname: 'api.themoviedb.org',
+    path: target,
+    method: 'GET',
+    headers: { 'User-Agent': 'Lukflix/1.0', 'Accept': 'application/json' }
+  };
+
+  const request = https.request(options, (response) => {
+    res.writeHead(response.statusCode, {
+      'Content-Type': response.headers['content-type'] || 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Cache-Control': 'public, max-age=300'
+    });
+    response.pipe(res);
+  });
+
+  request.on('error', (err) => {
+    res.writeHead(502, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Falha ao conectar com o TMDB', detail: err.message }));
+  });
+
+  request.setTimeout(30000, () => {
+    request.destroy();
+    res.writeHead(504, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Tempo esgotado (TMDB)' }));
+  });
+
+  request.end();
+}
+
 function serveStatic(req, res, pathname) {
   let relative = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
   let filePath = path.normalize(path.join(PUBLIC_DIR, relative));
@@ -89,6 +131,10 @@ const server = http.createServer((req, res) => {
 
   if (pathname.startsWith('/api/superflix')) {
     return proxySuperflix(req, res, pathname, parsed.search ? parsed.search.slice(1) : '');
+  }
+
+  if (pathname.startsWith('/api/tmdb')) {
+    return proxyTmdb(req, res, pathname, parsed.search ? parsed.search.slice(1) : '');
   }
 
   if (pathname.startsWith('/api/')) {
