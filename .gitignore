@@ -4,3 +4,9 @@ npm-debug.log
 .env
 .env.local
 *.log
+
+node.err
+node.log
+tunnel.log
+tunnel.err
+lt.log
